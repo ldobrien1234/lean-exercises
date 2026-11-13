@@ -1,0 +1,22 @@
+name = "basic"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Basic", "Exercises"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.35.0-rc4"
+
+[[lean_lib]]
+name = "Basic"
+
+[[lean_lib]]
+name = "Exercises"
+roots = ["Exercises", "Exercises2", "Exercises3"]
