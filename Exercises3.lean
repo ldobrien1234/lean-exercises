@@ -414,4 +414,53 @@ example (h : Q) : ¬¬Q := by
   exact h
 
 example (h : ¬FnHasUb f) : ∀ a, ∃ x, f x > a := by
-  sorry
+  intro a
+  by_contra h0
+  apply h
+  use a
+  intro x
+  apply le_of_not_gt
+  contrapose! h0
+  use x
+
+example (h : ¬∀ a, ∃ x, f x > a) : FnHasUb f := by
+  push Not at h
+  exact h
+
+example (h : ¬FnHasUb f) : ∀ a, ∃ x, f x > a := by
+  dsimp only [FnHasUb, FnUb] at h
+  push Not at h
+  exact h
+
+example (h : ¬Monotone f) : ∃ x y, x ≤ y ∧ f y < f x := by
+  dsimp [Monotone] at h
+  push Not at h
+  rcases h with ⟨x,y, mon_conc⟩
+  use x
+  use y
+
+-- contrapose! as opposed to contrapose applies push Not to the goal
+-- and relevant hypothesis as well
+example (h : ¬FnHasUb f) : ∀ a, ∃ x, f x > a := by
+  contrapose! h
+  exact h
+
+example (x : ℝ) (h : ∀ ε > 0, x ≤ ε) : x ≤ 0 := by
+  contrapose! h
+  use x / 2
+  constructor <;> linarith
+
+-- ex falso: anything follows from a contradiction.
+-- That is, False → P for any P
+
+
+example (h : 0 < 0) : a > 37 := by
+  exfalso
+  apply lt_irrefl 0 h
+
+example (h : 0 < 0) : a > 37 :=
+  absurd h (lt_irrefl 0)
+
+example (h : 0 < 0) : a > 37 := by
+  have h' : ¬0 < 0 := lt_irrefl 0
+  contradiction
