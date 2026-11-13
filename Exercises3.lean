@@ -382,7 +382,36 @@ example (h : ∀ x, ¬P x) : ¬∃ x, P x := by
   exact px
 
 example (h : ¬∀ x, P x) : ∃ x, ¬P x := by
-  sorry
+  contrapose! h
+  exact h
 
 example (h : ∃ x, ¬P x) : ¬∀ x, P x := by
+  intro all_x_px
+  rcases h with ⟨x, not_px⟩
+  apply not_px
+  exact all_x_px x
+
+
+-- Proof by contradiction
+-- by_contra tactic allows us to prove Q by assuming not Q and proving False
+example (h : ¬∀ x, P x) : ∃ x, ¬P x := by
+  by_contra h'
+  apply h
+  intro x
+  show P x
+  by_contra h''
+  exact h' ⟨x, h''⟩
+
+
+example (h : ¬¬Q) : Q := by
+  by_contra h0
+  apply h
+  exact h0
+
+example (h : Q) : ¬¬Q := by
+  intro not_q
+  apply not_q
+  exact h
+
+example (h : ¬FnHasUb f) : ∀ a, ∃ x, f x > a := by
   sorry
